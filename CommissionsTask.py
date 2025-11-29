@@ -1,7 +1,6 @@
 import re
 import time
 import random
-import random
 import win32api
 import win32con
 from enum import Enum
@@ -38,7 +37,7 @@ class CommissionsTask(BaseDNATask):
             "Play Sound Notification": True,
             "Auto Select First Letter and Reward": True,
             "Prioritize Letter Reward": "Disabled",
-            "Enable External Movement Logic": True,
+            "Jitter Mode": "Disabled",
             "External Movement Min Delay": 4.0,
             "External Movement Max Delay": 8.0,
             "External Movement Jitter Amount": 20,
@@ -51,7 +50,7 @@ class CommissionsTask(BaseDNATask):
             "Play Sound Notification": "Play sound notification when needed",
             "Auto Select First Letter and Reward": "Recommended to enable next option when farming weapon letters",
             "Prioritize Letter Reward": "Effective when previous option is enabled",
-            "Enable External Movement Logic": "Automatically focus game and move mouse randomly to prevent AFK",
+            "Jitter Mode": "Control when mouse jitter happens (Disabled, Always, Combat Only)",
             "External Movement Min Delay": "Minimum interval for random mouse movement (seconds)",
             "External Movement Max Delay": "Maximum interval for random mouse movement (seconds)",
             "External Movement Jitter Amount": "Maximum pixel distance to move mouse (default: 20)",
@@ -59,6 +58,10 @@ class CommissionsTask(BaseDNATask):
         self.config_type["Commission Manual"] = {
             "type": "drop_down",
             "options": ["Disabled", "100%", "200%", "800%", "2000%"],
+        }
+        self.config_type["Jitter Mode"] = {
+            "type": "drop_down",
+            "options": ["Disabled", "Always", "Combat Only"],
         }
         self.config_type["Use Skill"] = {
             "type": "drop_down",
@@ -379,7 +382,7 @@ class CommissionsTask(BaseDNATask):
 
     def create_external_movement_ticker(self):
         def action():
-            if not self.config.get("Enable External Movement Logic", False):
+            if self.config.get("Jitter Mode", "Disabled") == "Disabled":
                 # self.log_info("External movement disabled in config")
                 return
             self.log_info("Triggering External Movement Logic...")
@@ -436,7 +439,7 @@ class CommissionsTask(BaseDNATask):
         If external movement logic is enabled, force focus the game window immediately.
         This is useful to call at the start of a task to ensure the game is active.
         """
-        if self.config.get("Enable External Movement Logic", False):
+        if self.config.get("Jitter Mode", "Disabled") != "Disabled":
             self.log_info("External movement enabled: Forcing game window focus...")
             try:
                 self.try_bring_to_front()

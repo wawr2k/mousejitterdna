@@ -16,20 +16,20 @@ class AutoDefence(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.icon = FluentIcon.FLAG
-        self.name = "自动扼守"
-        self.description = "半自动"
-        self.group_name = "半自动"
+        self.name = "Auto Defence"
+        self.description = "Semi-Auto"
+        self.group_name = "Semi-Auto"
         self.group_icon = FluentIcon.VIEW
 
         self.default_config.update({
-            '轮次': 3,
+            'Rounds': 3,
         })
 
         self.setup_commission_config()
 
         self.config_description.update({
-            "轮次": "打几个轮次",
-            "超时时间": "波次超时后将发出提示",
+            "Rounds": "Number of rounds",
+            "Timeout": "Notify after wave timeout",
         })
 
         self.action_timeout = DEFAULT_ACTION_TIMEOUT
@@ -91,10 +91,10 @@ class AutoDefence(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                 self.init_all()
                 self.handle_mission_start()
             elif _status == Mission.STOP:
-                self.log_info("任务中止")
+                self.log_info("Task Stopped")
                 self.quit_mission()
             elif _status == Mission.CONTINUE:
-                self.log_info("任务继续")
+                self.log_info("Task Continued")
                 self.init_for_next_round()
                 self.wait_until(self.in_team, time_out=DEFAULT_ACTION_TIMEOUT)
 
@@ -123,46 +123,46 @@ class AutoDefence(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                     {"wave": self.current_wave, "wave_start_time": time.time(), "wait_next_wave": False})
                 self.quick_move_task.reset()
 
-            # 检查波次是否超时
+            # Check if wave timeout
             if not self.runtime_state["wait_next_wave"] and time.time() - self.runtime_state[
-                "wave_start_time"] >= self.config.get("超时时间", 120):
+                "wave_start_time"] >= self.config.get("Timeout", 120):
                 if self.external_movement is not _default_movement:
-                    self.log_info("任务超时")
+                    self.log_info("Task Timeout")
                     self.open_in_mission_menu()
                     return
                 else:
-                    self.log_info_notify("任务超时")
+                    self.log_info_notify("Task Timeout")
                     self.soundBeep()
                     self.runtime_state["wait_next_wave"] = True
 
-            # 如果未超时，则使用技能
+            # If not timeout, use skill
             if not self.runtime_state["wait_next_wave"]:
                 self.skill_tick()
                 self.external_movement_tick()
         else:
             if self.runtime_state["wave"] > 0:
                 self.init_runtime_state()
-            # 如果不在战斗波次中，执行移动任务
+            # If not in combat wave, execute move task
             self.quick_move_task.run()
 
     def handle_mission_start(self):
-        """处理任务开始的逻辑"""
+        """Handle mission start logic"""
         if self.external_movement is not _default_movement:
-            self.log_info("任务开始，执行外部移动逻辑")
+            self.log_info("Task Started, executing external movement")
             self.external_movement()
-            self.log_info(f"外部移动执行完毕，等待战斗开始，{DEFAULT_ACTION_TIMEOUT+10}秒后超时")
+            self.log_info(f"External movement finished, waiting for combat start, timeout in {DEFAULT_ACTION_TIMEOUT+10}s")
             if not self.wait_until(lambda: self.current_wave != -1, post_action=self.get_wave_info,
                                    time_out=DEFAULT_ACTION_TIMEOUT+10):
-                self.log_info("等待战斗开始超时，重开任务")
+                self.log_info("Timeout waiting for combat start, restarting")
                 self.open_in_mission_menu()
             else:
-                self.log_info("战斗开始")
+                self.log_info("Combat Started")
         else:
-            self.log_info_notify("任务开始")
+            self.log_info_notify("Task Started")
             self.soundBeep()
 
     def stop_func(self):
         self.get_round_info()
-        n = self.config.get("轮次", 3)
+        n = self.config.get("Rounds", 3)
         if self.current_round >= n:
             return True

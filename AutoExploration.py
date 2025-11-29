@@ -16,20 +16,20 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.icon = FluentIcon.FLAG
-        self.name = "自动探险"
-        self.description = "半自动"
-        self.group_name = "半自动"
+        self.name = "Auto Exploration"
+        self.description = "Semi-Auto"
+        self.group_name = "Semi-Auto"
         self.group_icon = FluentIcon.VIEW
 
         self.default_config.update({
-            '轮次': 3,
+            'Rounds': 3,
         })
 
         self.setup_commission_config()
 
         self.config_description.update({
-            '轮次': '打几个轮次',
-            '超时时间': '超时后将发出提示',
+            'Rounds': 'Number of rounds',
+            'Timeout': 'Notify after timeout',
         })
 
         self.action_timeout = DEFAULT_ACTION_TIMEOUT
@@ -37,6 +37,7 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
         self.external_movement = _default_movement
         self._external_config = None
         self.skill_tick = self.create_skill_ticker()
+        self.external_movement_tick = self.create_external_movement_ticker()
         self._merged_config_cache = None
 
     @property
@@ -61,6 +62,7 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
         DNAOneTimeTask.run(self)
         self.move_mouse_to_safe_position(save_current_pos=False)
         self.set_check_monthly_card()
+        self.ensure_game_focused()
         self.external_movement = _default_movement
         try:
             return self.do_run()
@@ -88,10 +90,10 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                 self.init_all()
                 self.handle_mission_start()
             elif _status == Mission.STOP:
-                self.log_info("任务中止")
+                self.log_info("Task Stopped")
                 self.quit_mission()
             elif _status == Mission.CONTINUE:
-                self.log_info("任务继续")
+                self.log_info("Task Continued")
                 self.init_for_next_round()
                 self.wait_until(self.in_team, time_out=DEFAULT_ACTION_TIMEOUT)
                 self.sleep(2)
@@ -102,6 +104,7 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def init_all(self):
         self.init_for_next_round()
         self.skill_tick.reset()
+        self.external_movement_tick.reset()
         self.current_round = 0
 
     def init_for_next_round(self):
@@ -116,18 +119,19 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                 self.runtime_state["start_time"] = time.time()
                 self.quick_move_task.reset()
             
-            if not self.runtime_state["wait_next_round"] and time.time() - self.runtime_state["start_time"] >= self.config.get("超时时间", 120):
+            if not self.runtime_state["wait_next_round"] and time.time() - self.runtime_state["start_time"] >= self.config.get("Timeout", 120):
                 if self.external_movement is not _default_movement:
-                    self.log_info("任务超时")
+                    self.log_info("Task Timeout")
                     self.open_in_mission_menu()
                     return
                 else:
-                    self.log_info_notify("任务超时")
+                    self.log_info_notify("Task Timeout")
                     self.soundBeep()
                     self.runtime_state["wait_next_round"] = True
             
             if not self.runtime_state["wait_next_round"]:
                 self.skill_tick()
+                self.external_movement_tick()
         else:
             if self.runtime_state["start_time"] > 0:
                 self.init_runtime_state()
@@ -135,21 +139,21 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
 
     def handle_mission_start(self):
         if self.external_movement is not _default_movement:
-            self.log_info("任务开始")
+            self.log_info("Task Started")
             self.external_movement()
-            self.log_info(f"外部移动执行完毕，等待战斗开始，{DEFAULT_ACTION_TIMEOUT+10}秒后超时")
+            self.log_info(f"External movement finished, waiting for combat start, timeout in {DEFAULT_ACTION_TIMEOUT+10}s")
             if not self.wait_until(self.find_serum, time_out=DEFAULT_ACTION_TIMEOUT+10):
-                self.log_info("超时重开")
+                self.log_info("Timeout, restarting")
                 self.open_in_mission_menu()
             else:
-                self.log_info("战斗开始")
+                self.log_info("Combat Started")
         else:
-            self.log_info_notify("任务开始")
+            self.log_info_notify("Task Started")
             self.soundBeep()
         
     def stop_func(self):
         self.get_round_info()
-        if self.current_round >= self.config.get("轮次", 3):
+        if self.current_round >= self.config.get("Rounds", 3):
             return True
 
     def find_serum(self):
