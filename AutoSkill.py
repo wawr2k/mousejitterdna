@@ -38,6 +38,7 @@ class AutoSkill(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
 
     def run(self):
         DNAOneTimeTask.run(self)
+        self.ensure_game_focused()
         try:
             return self.do_run()
         except TaskDisabledException:

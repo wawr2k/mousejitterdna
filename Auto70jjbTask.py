@@ -47,6 +47,7 @@ class Auto70jjbTask(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
         DNAOneTimeTask.run(self)
         self.move_mouse_to_safe_position(save_current_pos=False)
         self.set_check_monthly_card()
+        self.ensure_game_focused()
         try:
             _to_do_task = self.get_task_by_class(AutoDefence)
             _to_do_task.config_external_movement(self.walk_to_aim, self.config)

@@ -38,9 +38,10 @@ class CommissionsTask(BaseDNATask):
             "Play Sound Notification": True,
             "Auto Select First Letter and Reward": True,
             "Prioritize Letter Reward": "Disabled",
-            "Enable External Movement Logic": False,
+            "Enable External Movement Logic": True,
             "External Movement Min Delay": 4.0,
             "External Movement Max Delay": 8.0,
+            "External Movement Jitter Amount": 20,
         })
         self.config_description.update({
             "Commission Manual Specific Rounds": "Example: 3,5,8",
@@ -53,6 +54,7 @@ class CommissionsTask(BaseDNATask):
             "Enable External Movement Logic": "Automatically focus game and move mouse randomly to prevent AFK",
             "External Movement Min Delay": "Minimum interval for random mouse movement (seconds)",
             "External Movement Max Delay": "Maximum interval for random mouse movement (seconds)",
+            "External Movement Jitter Amount": "Maximum pixel distance to move mouse (default: 20)",
         })
         self.config_type["Commission Manual"] = {
             "type": "drop_down",
@@ -150,7 +152,6 @@ class CommissionsTask(BaseDNATask):
             post_action=lambda: self.click_box(quit_btn, after_sleep=0.25),
             time_out=action_timeout,
             raise_if_not_found=True,
-            
         )
         self.sleep(1)
         self.wait_until(lambda: not self.in_team(), time_out=action_timeout, raise_if_not_found=True)
@@ -405,24 +406,23 @@ class CommissionsTask(BaseDNATask):
                 # Get current position
                 current_x, current_y = win32api.GetCursorPos()
                 
+                # Get jitter amount from config
+                jitter_amount = int(self.config.get("External Movement Jitter Amount", 20))
+                
                 # Generate small random offset (jitter)
-                offset_x = random.randint(-20, 20)
-                offset_y = random.randint(-20, 20)
+                offset_x = random.randint(-jitter_amount, jitter_amount)
+                offset_y = random.randint(-jitter_amount, jitter_amount)
                 
                 # Ensure we don't just stay in place
                 if offset_x == 0 and offset_y == 0:
-                    offset_x = 10
+                    offset_x = jitter_amount // 2 or 5
                 
-                target_x = current_x + offset_x
-                target_y = current_y + offset_y
-                
-                # Move mouse using win32api
-                self.log_info(f"Jittering mouse from ({current_x}, {current_y}) to ({target_x}, {target_y})")
-                win32api.SetCursorPos((target_x, target_y))
+                # Use relative movement for better camera control compatibility
+                self.move_mouse_relative(offset_x, offset_y)
+                self.log_info(f"Jittering mouse relative by ({offset_x}, {offset_y})")
                 
             except Exception as e:
                 self.log_error(f"External movement error: {e}")
-
         return self.create_ticker(
             action,
             interval=lambda: random.uniform(
@@ -430,6 +430,18 @@ class CommissionsTask(BaseDNATask):
                 float(self.config.get("External Movement Max Delay", 9.0))
             )
         )
+
+    def ensure_game_focused(self):
+        """
+        If external movement logic is enabled, force focus the game window immediately.
+        This is useful to call at the start of a task to ensure the game is active.
+        """
+        if self.config.get("Enable External Movement Logic", False):
+            self.log_info("External movement enabled: Forcing game window focus...")
+            try:
+                self.try_bring_to_front()
+            except Exception as e:
+                self.log_error(f"Failed to focus window: {e}")
 
     def get_round_info(self):
         """获取并更新当前轮次信息。"""
