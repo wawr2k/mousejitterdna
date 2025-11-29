@@ -3,7 +3,6 @@
 This mod adds a "Mouse Jitter" feature to prevent AFK detection in Duet Night Abyss. It works by periodically moving the mouse cursor slightly when the game is in the background or foreground.
 
 ## Features
-- **Safe:** Uses human-like mouse movements (jitter) instead of memory injection.
 - **Non-Disruptive:** Checks if the mouse is in the game window before jittering. If the mouse is outside, it centers it first.
 - **Configurable:** You can enable/disable it and set the jitter interval in the task settings.
 
@@ -34,4 +33,5 @@ This mod adds a "Mouse Jitter" feature to prevent AFK detection in Duet Night Ab
 - `AutoDefence.py`: Adds support for Auto Defence task.
 - `ImportTask.py`: Adds support for Auto Dungeon (ImportTask).
 - `Auto70jjbTask.py`: Adds support for Level 70 Shell Credit Dungeon.
+
 
