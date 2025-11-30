@@ -25,7 +25,7 @@ class AutoFishTask(DNAOneTimeTask, BaseDNATask):
         super().__init__(*args, **kwargs)
         self.name = "Auto Fishing"
         self.description = "No-Idle Auto Fishing (Original Author: Bilibili Invincible Big Melon)"
-        self.group_name = "Full Auto"
+        self.group_name = "Full-Auto"
         self.group_icon = FluentIcon.CAFE
 
         # Default config (will be covered by configs/AutoFishTask.json)
