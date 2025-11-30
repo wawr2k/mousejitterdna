@@ -39,7 +39,7 @@ class ImportTask(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
         self.icon = FluentIcon.FLAG
         self.name = "Auto Dungeon with External Logic"
         self.description = "Full Auto"
-        self.group_name = "Full Auto"
+        self.group_name = "Full-Auto"
         self.group_icon = FluentIcon.CAFE
         self.last_f_time = 0
         self.last_f_was_interact = False
