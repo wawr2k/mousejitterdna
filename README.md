@@ -24,12 +24,9 @@ https://github.com/wawr2k/macrorec for other scripts/mod and english keyboard/mo
 ## Installation
 
 1.  Copy the `.py` files from this folder to your `ok-dna/src/tasks/` directory (and subdirectories as appropriate).
-    CommissionsTask.py -> src/tasks/
-    
-    AutoExploration.py -> src/tasks/
-    
-    AutoDefence.py -> src/tasks/
-    
+    CommissionsTask.py -> src/tasks/    
+    AutoExploration.py -> src/tasks/  
+    AutoDefence.py -> src/tasks/   
     AutoExpulsion.py -> src/tasks/
     
     AutoFishTask.py -> src/tasks/fullauto/
@@ -111,6 +108,7 @@ Settings are saved to `log_deleter_config.json` in the same directory:
 *   ok-dna.exe path
 
 *   Launch enabled/disabled state
+
 
 
 
