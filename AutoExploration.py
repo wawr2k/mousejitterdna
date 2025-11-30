@@ -96,8 +96,6 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                 self.log_info("Task Continued")
                 self.init_for_next_round()
                 self.wait_until(self.in_team, time_out=DEFAULT_ACTION_TIMEOUT)
-                self.sleep(2)
-                self.handle_mission_start()
 
             self.sleep(0.1)
 
@@ -125,8 +123,10 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                     self.open_in_mission_menu()
                     return
                 else:
-                    self.log_info_notify("Task Timeout")
-                    self.soundBeep()
+                    if self.config.get("Play Sound Notification", True):
+                        self.log_info_notify("Task Timeout")
+                    else:
+                        self.log_info("Task Timeout")
                     self.runtime_state["wait_next_round"] = True
             
             if not self.runtime_state["wait_next_round"]:
@@ -148,8 +148,10 @@ class AutoExploration(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
             else:
                 self.log_info("Combat Started")
         else:
-            self.log_info_notify("Task Started")
-            self.soundBeep()
+            if self.config.get("Play Sound Notification", True):
+                self.log_info_notify("Task Started")
+            else:
+                self.log_info("Task Started")
         
     def stop_func(self):
         self.get_round_info()

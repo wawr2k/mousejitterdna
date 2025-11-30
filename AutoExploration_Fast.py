@@ -26,7 +26,7 @@ class AutoExploration_Fast(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
         self.group_icon = FluentIcon.CAFE
         self.name = "Auto Exploration/Endless"
         self.description = "Full Auto"
-        self.group_name = "Full Auto"
+        self.group_name = "Full-Auto"
         self.default_config.update({
             'Rounds': 3,
             'Timeout': 120,
@@ -278,7 +278,8 @@ class AutoExploration_Fast(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                     self.open_in_mission_menu()
                 else:
                     self.log_info_notify("Puzzle solving failed, requesting manual intervention")
-                    self.soundBeep()
+                    if self.config.get("Play Sound Notification", True):
+                        self.soundBeep()
                     self.wait_until(self.in_team, time_out = 60)
                 return False               
         return True

@@ -131,8 +131,10 @@ class AutoDefence(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
                     self.open_in_mission_menu()
                     return
                 else:
-                    self.log_info_notify("Task Timeout")
-                    self.soundBeep()
+                    if self.config.get("Play Sound Notification", True):
+                        self.log_info_notify("Task Timeout")
+                    else:
+                        self.log_info("Task Timeout")
                     self.runtime_state["wait_next_wave"] = True
 
             # If not timeout, use skill
@@ -158,8 +160,10 @@ class AutoDefence(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
             else:
                 self.log_info("Combat Started")
         else:
-            self.log_info_notify("Task Started")
-            self.soundBeep()
+            if self.config.get("Play Sound Notification", True):
+                self.log_info_notify("Task Started")
+            else:
+                self.log_info("Task Started")
 
     def stop_func(self):
         self.get_round_info()
