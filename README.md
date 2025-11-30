@@ -1,6 +1,7 @@
 # Mouse Jitter AFK Bypass
 
 This mod adds a "Mouse Jitter" feature to prevent AFK detection in Duet Night Abyss. It works by periodically moving the mouse cursor slightly when the game is in the background or foreground.
+
 https://github.com/wawr2k/macrorec for other scripts/mod and english keyboard/mouse recorder. 
 
 ## Features
@@ -16,29 +17,54 @@ https://github.com/wawr2k/macrorec for other scripts/mod and english keyboard/mo
 *   **Auto Exploration** (AutoExploration / AutoExploration_Fast)
 *   **Auto Dungeon** (ImportTask)
 *   **Auto Defence** (AutoDefence - via inheritance)
-*   **Auto 70jjb** (Auto70jjbTask - via inheritance)
-*   **Auto Skill** (AutoSkill - via inheritance)
+*   **Auto Expulsion** (AutoExpulsion)
 
 ## Installation
 
 1.  Copy the `.py` files from this folder to your `ok-dna/src/tasks/` directory (and subdirectories as appropriate).
 
-    CommissionsTask.py -> src/tasks/    
-    AutoExploration.py -> src/tasks/  
-    AutoDefence.py -> src/tasks/   
+    ```
+    CommissionsTask.py -> src/tasks/
+    AutoExploration.py -> src/tasks/
+    AutoDefence.py -> src/tasks/
     AutoExpulsion.py -> src/tasks/
     AutoFishTask.py -> src/tasks/fullauto/
-    AutoExploration_Fast.py -> src/tasks/fullauto/ 
+    AutoExploration_Fast.py -> src/tasks/fullauto/
     ImportTask.py -> src/tasks/fullauto/
+    ```
     
-    Optional files
+    **Optional files** (for consistent group names across all tasks):
     
+    ```
     AutoEscortTask.py -> src/tasks/fullauto/
     Auto70jjbTask.py -> src/tasks/fullauto/
     Auto65ArtifactTask_Fast.py -> src/tasks/fullauto/
     AutoHedge.py -> src/tasks/
     AutoGeneral.py -> src/tasks/
     AutoExcavation.py -> src/tasks/
+    ```
+
+2.  Restart the ok-dna application.
+
+## Configuration
+
+Each task now has a "Jitter Mode" setting with three options:
+
+*   **Disabled**: No mouse jitter (default for safety)
+*   **Always**: Jitter during navigation and combat phases
+*   **Combat Only**: Jitter only during combat (recommended for most tasks)
+
+You can also configure:
+*   **External Movement Min Delay**: Minimum interval between jitters (default: 4 seconds)
+*   **External Movement Max Delay**: Maximum interval between jitters (default: 8 seconds)
+*   **External Movement Jitter Amount**: Maximum pixel distance to move mouse (default: 20)
+
+## What's New
+
+*   English translations for all task names and configurations
+*   Consistent group names (Full-Auto and Semi-Auto) to prevent duplicate tabs
+*   Fixed sound notification handling (respects "Play Sound Notification" setting)
+*   Fixed Auto Exploration to not trigger map detection between rounds
 
 ---
 
