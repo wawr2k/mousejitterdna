@@ -1,8 +1,9 @@
-# Mouse Jitter AFK Bypass
+# Mouse Jitter AFK Bypass & Log Deleter
 
-This mod adds a "Mouse Jitter" feature to prevent AFK detection in Duet Night Abyss. It works by periodically moving the mouse cursor slightly when the game is in the background or foreground.
+This package includes two tools:
 
-https://github.com/wawr2k/macrorec for other scripts/mod and english keyboard/mouse recorder. 
+1. **Mouse Jitter AFK Bypass** - Prevents AFK detection by periodically moving your mouse
+2. **Log Deleter** - Automatically removes game log files to reduce detection risk
 
 ## Features
 
@@ -165,4 +166,5 @@ Settings are saved to `log_deleter_config.json` in the same directory:
 *   Game installation path
 *   Game executable path
 *   ok-dna.exe path
+
 *   Launch enabled/disabled state
