@@ -25,20 +25,33 @@ https://github.com/wawr2k/macrorec for other scripts/mod and english keyboard/mo
 
 1.  Copy the `.py` files from this folder to your `ok-dna/src/tasks/` directory (and subdirectories as appropriate).
     CommissionsTask.py -> src/tasks/
+    
     AutoExploration.py -> src/tasks/
+    
     AutoDefence.py -> src/tasks/
+    
     AutoExpulsion.py -> src/tasks/
+    
     AutoFishTask.py -> src/tasks/fullauto/
+    
     AutoExploration_Fast.py -> src/tasks/fullauto/
+    
     ImportTask.py -> src/tasks/fullauto/
     
     Optional files
+    
     AutoEscortTask.py -> src/tasks/fullauto/
+    
     Auto70jjbTask.py -> src/tasks/fullauto/
+    
     Auto65ArtifactTask_Fast.py -> src/tasks/fullauto/
+    
     AutoHedge.py -> src/tasks/
+    
     AutoGeneral.py -> src/tasks/
+    
     AutoExcavation.py -> src/tasks/
+    
     
 *   **AutoExploration_Fast.py**: Updated with map detection logging and jitter logic.
 *   **AutoExploration.py**: Updated to fix "stuck" issues and support jitter.
@@ -98,5 +111,6 @@ Settings are saved to `log_deleter_config.json` in the same directory:
 *   ok-dna.exe path
 
 *   Launch enabled/disabled state
+
 
 
