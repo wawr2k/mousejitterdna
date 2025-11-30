@@ -46,6 +46,7 @@ class AutoExpulsion(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
         
         self.skill_tick = self.create_skill_ticker()
         self.random_walk_tick = self.create_random_walk_ticker()
+        self.external_movement_tick = self.create_external_movement_ticker()
 
     def run(self):
         DNAOneTimeTask.run(self)
@@ -83,6 +84,7 @@ class AutoExpulsion(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
     def init_all(self):
         self.init_for_next_round()
         self.skill_tick.reset()
+        self.external_movement_tick.reset()
         self.current_round = 0
 
     def init_for_next_round(self):
@@ -105,13 +107,15 @@ class AutoExpulsion(DNAOneTimeTask, CommissionsTask, BaseCombatTask):
 
         self.random_walk_tick()
         self.skill_tick()
+        self.external_movement_tick()
 
     def handle_mission_start(self):
         if self.count >= self.config.get("Repeat Count", 999):
             self.sleep(1)
             self.open_in_mission_menu()
             self.log_info_notify("Task Terminated")
-            self.soundBeep()
+            if self.config.get("Play Sound Notification", True):
+                self.soundBeep()
             return
         self.log_info("Task Started")
     
