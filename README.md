@@ -16,35 +16,48 @@ https://github.com/wawr2k/macrorec for other scripts/mod and english keyboard/mo
 *   **Auto Fish** (AutoFishTask)
 *   **Auto Exploration** (AutoExploration / AutoExploration_Fast)
 *   **Auto Dungeon** (ImportTask)
-*   **Auto Defence** (AutoDefence - via inheritance)
+*   **Auto Defence** (AutoDefence)
 *   **Auto Expulsion** (AutoExpulsion)
 
 ## Installation
 
-1.  Copy the `.py` files from this folder to your `ok-dna/src/tasks/` directory (and subdirectories as appropriate).
+### Method 1: Automatic Installation (Recommended)
 
-    ```
-    CommissionsTask.py -> src/tasks/
-    AutoExploration.py -> src/tasks/
-    AutoDefence.py -> src/tasks/
-    AutoExpulsion.py -> src/tasks/
-    AutoFishTask.py -> src/tasks/fullauto/
-    AutoExploration_Fast.py -> src/tasks/fullauto/
-    ImportTask.py -> src/tasks/fullauto/
-    ```
-    
-    **Optional files** (for consistent group names across all tasks):
-    
-    ```
-    AutoEscortTask.py -> src/tasks/fullauto/
-    Auto70jjbTask.py -> src/tasks/fullauto/
-    Auto65ArtifactTask_Fast.py -> src/tasks/fullauto/
-    AutoHedge.py -> src/tasks/
-    AutoGeneral.py -> src/tasks/
-    AutoExcavation.py -> src/tasks/
-    ```
+1.  **Download** and extract the mousejitter folder
+2.  **Double-click** `INSTALL.bat`
+3.  **Confirm** the auto-detected ok-dna installation path (or enter it manually if needed)
+4.  **Wait** for the installation to complete
+5.  **Restart** ok-dna application
 
-2.  Restart the ok-dna application.
+The installer will:
+- Automatically detect your ok-dna installation
+- Create a backup of your existing files (with timestamp)
+- Copy all modified files to the correct locations
+- Show progress for each file
+
+### Method 2: Drag and Drop
+
+1.  Copy the entire `src` folder from this directory
+2.  Paste it into your `ok-dna` installation folder
+3.  When prompted, choose to **merge/replace** the files
+4.  Restart the ok-dna application
+
+### Method 3: Manual Installation
+
+If you prefer to copy files individually:
+
+1.  Copy files from `src/tasks/` to your `ok-dna/src/tasks/` directory:
+    - `CommissionsTask.py`
+    - `AutoExploration.py`
+    - `AutoDefence.py`
+    - `AutoExpulsion.py`
+
+2.  Copy files from `src/tasks/fullauto/` to your `ok-dna/src/tasks/fullauto/` directory:
+    - `AutoFishTask.py`
+    - `AutoExploration_Fast.py`
+    - `ImportTask.py`
+
+3.  Restart the ok-dna application
 
 ## Configuration
 
@@ -59,12 +72,46 @@ You can also configure:
 *   **External Movement Max Delay**: Maximum interval between jitters (default: 8 seconds)
 *   **External Movement Jitter Amount**: Maximum pixel distance to move mouse (default: 20)
 
+## How to Use
+
+1.  Open ok-dna and select a supported task
+2.  In the task settings, find **"Jitter Mode"**
+3.  Set it to **"Combat Only"** (recommended) or **"Always"**
+4.  Adjust the delay and jitter amount if needed
+5.  Start the task as normal
+
+You'll see log messages like:
+```
+Triggering External Movement Logic...
+Jittering mouse relative by (-127, 64)
+```
+
+This confirms the jitter is working!
+
 ## What's New
 
-*   English translations for all task names and configurations
-*   Consistent group names (Full-Auto and Semi-Auto) to prevent duplicate tabs
-*   Fixed sound notification handling (respects "Play Sound Notification" setting)
-*   Fixed Auto Exploration to not trigger map detection between rounds
+*   ✅ English translations for all task names and configurations
+*   ✅ Consistent group names (Full-Auto and Semi-Auto) to prevent duplicate tabs
+*   ✅ Fixed sound notification handling (respects "Play Sound Notification" setting)
+*   ✅ Fixed Auto Exploration to not trigger map detection between rounds
+*   ✅ Added jitter support to Auto Expulsion
+*   ✅ Easy installer script for automatic installation
+
+## Troubleshooting
+
+**Duplicate tabs appearing?**
+- Make sure you installed ALL the files, not just some of them
+- The duplicate tabs occur when mixing old Chinese group names with new English ones
+
+**Jitter not working?**
+- Check that "Jitter Mode" is set to "Always" or "Combat Only" (not "Disabled")
+- Look for "Triggering External Movement Logic..." in the logs
+- Make sure the task is actually running (not paused)
+
+**Installation failed?**
+- Run `INSTALL.bat` as Administrator
+- Make sure ok-dna is closed during installation
+- Check that you have write permissions to the ok-dna folder
 
 ---
 
